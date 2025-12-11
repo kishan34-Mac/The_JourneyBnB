@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WonderLust | New Listing</title>
+  </head>
+  <body>
+    <h1>Create a New Listing</h1>
+
+    <form action="/listings" method="POST">
+      <div>
+        <label for="title">Title</label><br>
+        <input id="title" name="listing[title]" type="text" required>
+      </div>
+
+      <div>
+        <label for="description">Description</label><br>
+        <textarea id="description" name="listing[description]" rows="3" required></textarea>
+      </div>
+
+      <div>
+        <label for="price">Price</label><br>
+        <input id="price" name="listing[price]" type="number" min="0" step="1" required>
+      </div>
+
+      <div>
+        <label for="location">Location</label><br>
+        <input id="location" name="listing[location]" type="text" required>
+      </div>
+
+      <button type="submit">Create Listing</button>
+    </form>
+
+    <!-- Home button (not a form submit) -->
+    <a href="/">
+      <button type="button">Go to Home</button>
+    </a>
+  </body>
+</html>

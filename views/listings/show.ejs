@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WonderLust | <%= listing.title %></title>
+  </head>
+  <body>
+    <h1><%= listing.title %></h1>
+    <p><%= listing.description %></p>
+    <p>Price: <%= listing.price %></p>
+    <p>Location: <%= listing.location %></p>
+
+    <!-- EDIT BUTTON -->
+    <a href="/listings/<%= listing._id %>/edit">
+      <button type="button">Edit Listing</button>
+    </a>
+
+    <a href="/listings">
+      <button type="button"> Back to All Listings</button>
+    </a>
+  </body>
+</html>
