@@ -1,0 +1,25 @@
+<% layout("layouts/boilerplate") -%>
+
+<!-- <div class="top-area"> -->
+  <!-- <h1 class="boxed-title">All listings <span class="heart">♥</span></h1> -->
+
+  <!-- <a class="boxed-btn" href="/listings/new">Create new listing</a>
+</div> -->
+
+<div class="row g-3">
+  <% for (let listing of allListings) { %>
+<div class="col-md-4">
+  <div class="card listing-card">
+    <img src="<%= listing.image.url %>" class="card-img-top listing-img" alt="<%= listing.title %>">
+    <div class="card-body">
+      <h5 class="card-title"><%= listing.title %></h5>
+      <p class="card-text"><%= listing.description %></p>
+      <p class="card-price">₹ <%= listing.price %>/night</p>
+      <a href="/listings/<%= listing._id %>" class="btn btn-primary">View details</a>
+    </div>
+  </div>
+</div>
+
+  <% } %>
+</div>
+
