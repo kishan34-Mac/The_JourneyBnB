@@ -1,27 +1,89 @@
 <% layout("layouts/boilerplate") -%>
 
-  <body>
-    <h1><%= listing.title %></h1>
-    <p><%= listing.description %></p>
-    <p>Price: <%= listing.price %></p>
-    <p>Location: <%= listing.location %></p>
-    <p>country: <%= listing.country %></p>
+<div class="show-container">
+  <!-- Listing Header -->
+  <div class="show-header">
+    <div class="header-content">
+      <h1 class="listing-title"><%= listing.title %></h1>
+      <p class="listing-location">
+        <span class="location-icon">📍</span>
+        <%= listing.location %>, <%= listing.country %>
+      </p>
+    </div>
+    <div class="header-actions">
+      <a href="/listings" class="header-btn back-btn">
+        <span>←</span> Back
+      </a>
+    </div>
+  </div>
 
+  <!-- Main Content Grid -->
+  <div class="show-content">
+    <!-- Image Section -->
+    <div class="show-image-section">
+      <div class="image-container">
+        <img
+          src="<%= listing.image
+                  ? (typeof listing.image === 'object'
+                        ? listing.image.url
+                        : listing.image)
+                  : 'https://images.unsplash.com/photo-1501785888041-af3ef2552f18' %>"
+          alt="<%= listing.title %>"
+          class="show-image"
+        >
+        <div class="image-overlay">
+          <span class="price-badge">₹<%= listing.price %>/night</span>
+        </div>
+      </div>
+    </div>
 
-    <!-- EDIT BUTTON -->
-    <a href="/listings/<%= listing._id %>/edit">
-      <button type="button">Edit Listing</button>
-    </a>
-    <br>     
-    <br>
+    <!-- Details Section -->
+    <div class="show-details-section">
+      <!-- Description Card -->
+      <div class="detail-card">
+        <div class="card-header">
+          <span class="card-icon">📝</span>
+          <h2>Description</h2>
+        </div>
+        <p class="description-text"><%= listing.description %></p>
+      </div>
 
-    <!-- //Delete this listing's -->
-  <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE">
-  <button type="submit">Delete this listing</button>
-</form>
-<br><br>
-    <a href="/listings">
-      <button type="button"> Back to All Listings</button>
-    </a>
-  </body>
- 
+      <!-- Property Info Card -->
+      <div class="detail-card">
+        <div class="card-header">
+          <span class="card-icon">ℹ️</span>
+          <h2>Property Information</h2>
+        </div>
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="info-label">💰 Price</span>
+            <span class="info-value">₹<%= listing.price %> per night</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">📍 Location</span>
+            <span class="info-value"><%= listing.location %></span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">🌍 Country</span>
+            <span class="info-value"><%= listing.country %></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="action-buttons">
+        <a href="/listings/<%= listing._id %>/edit" class="action-btn edit-btn">
+          <span class="btn-icon">✏️</span>
+          Edit Listing
+        </a>
+        
+        <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE" class="delete-form">
+          <button type="submit" class="action-btn delete-btn" onclick="return confirm('Are you sure you want to delete this listing?')">
+            <span class="btn-icon">🗑️</span>
+            Delete Listing
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,30 +1,215 @@
- <% layout("layouts/boilerplate") -%>
-  <body>
-    <h3>Edit your Listing</h3>
-    <form method="POST" action="/listings/<%= listing._id %>?_method=PUT">
-      <input name="listing[title]" value="<%= listing.title %>" type="text" />
-      <br /><br /> 
-      <textarea name="listing[description]">
-<%= listing.description %></textarea
+<% layout("layouts/boilerplate") -%>
+
+<div class="edit-listing-container">
+  <!-- Preview Section -->
+  <div class="edit-preview-section">
+    <div class="preview-header">
+      <span class="preview-badge">Preview</span>
+      <h2>How it looks</h2>
+    </div>
+    <div class="preview-card">
+      <img 
+        src="<%= listing.image && listing.image.url 
+                ? listing.image.url 
+                : 'https://images.unsplash.com/photo-1501785888041-af3ef2552f18' %>" 
+        alt="<%= listing.title %>" 
+        class="preview-image" 
+        id="previewImage"
       >
-      <br/><br/>
-      <input name="listing[image]" value="<%= listing.image %>" type="text" />
-      <br /><br />
-      <input name="listing[price]" value="<%= listing.price %>" type="number" />
-      <br /><br />
-      <input
-        name="listing[country]"
-        value="<%= listing.country %>"
-        type="text"
-      />
-      <br/><br />
-      <input
-        name="listing[location]"
-        value="<%= listing.location %>"
-        type="text"
-      />
-      <br /><br />
-      <button>Edit</button>
+      <div class="preview-content">
+        <h3 id="previewTitle"><%= listing.title %></h3>
+        <p id="previewLocation">📍 <%= listing.location %>, <%= listing.country %></p>
+        <p class="preview-price" id="previewPrice">₹<%= listing.price %>/night</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Form Section -->
+  <div class="edit-form-section">
+    <div class="edit-header">
+      <div class="edit-icon-wrapper">
+        <span class="edit-icon">🔧</span>
+      </div>
+      <h1>Edit Listing</h1>
+      <p>Make changes to your property listing</p>
+    </div>
+
+    <form method="POST" action="/listings/<%= listing._id %>?_method=PUT" class="edit-form">
+      
+      <!-- Title -->
+      <div class="edit-form-group">
+        <label for="title" class="edit-label">
+          <span class="label-number">1</span>
+          Property Title
+        </label>
+        <input 
+          id="title" 
+          name="listing[title]" 
+          value="<%= listing.title %>"
+          type="text" 
+          class="edit-input"
+          placeholder="Enter property title"
+          required
+          oninput="updatePreview()"
+        />
+      </div>
+
+      <!-- Description -->
+      <div class="edit-form-group">
+        <label for="description" class="edit-label">
+          <span class="label-number">2</span>
+          Description
+        </label>
+        <textarea
+          id="description"
+          name="listing[description]"
+          rows="4"
+          class="edit-input edit-textarea"
+          placeholder="Describe your property..."
+          required
+        ><%= listing.description %></textarea>
+      </div>
+
+      <!-- Image URL -->
+      <!-- Image URL -->
+<div class="edit-form-group">
+  <label for="image" class="edit-label">
+    <span class="label-number">3</span>
+    Image URL
+  </label>
+  <input 
+    id="image" 
+    name="listing[image]" 
+    value="<%= listing.image && listing.image.url ? listing.image.url : '' %>"
+    type="url" 
+    class="edit-input"
+    placeholder="https://example.com/image.jpg"
+    required
+    oninput="updatePreview()"
+  />
+</div>
+
+
+      <!-- Two Column Grid -->
+      <div class="edit-grid">
+        <!-- Price -->
+        <div class="edit-form-group">
+          <label for="price" class="edit-label">
+            <span class="label-number">4</span>
+            Price per Night
+          </label>
+          <div class="edit-input-wrapper">
+            <span class="input-prefix">₹</span>
+            <input
+              id="price"
+              name="listing[price]"
+              value="<%= listing.price %>"
+              type="number"
+              min="0"
+              step="100"
+              class="edit-input edit-input-with-prefix"
+              placeholder="1000"
+              required
+              oninput="updatePreview()"
+            />
+          </div>
+        </div>
+
+        <!-- Location -->
+        <div class="edit-form-group">
+          <label for="location" class="edit-label">
+            <span class="label-number">5</span>
+            Location
+          </label>
+          <input 
+            id="location" 
+            name="listing[location]" 
+            value="<%= listing.location %>"
+            type="text" 
+            class="edit-input"
+            placeholder="City, State"
+            required
+            oninput="updatePreview()"
+          />
+        </div>
+      </div>
+
+      <!-- Country -->
+      <div class="edit-form-group">
+        <label for="country" class="edit-label">
+          <span class="label-number">6</span>
+          Country
+        </label>
+        <input 
+          id="country" 
+          name="listing[country]" 
+          value="<%= listing.country %>"
+          type="text" 
+          class="edit-input"
+          placeholder="Country name"
+          required
+          oninput="updatePreview()"
+        />
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="edit-actions">
+        <a href="/listings/<%= listing._id %>" class="edit-btn edit-btn-secondary">
+          <span>✕</span>
+          Discard Changes
+        </a>
+        <button type="submit" class="edit-btn edit-btn-primary">
+          <span>✓</span>
+          Save Changes
+        </button>
+      </div>
     </form>
-  </body>
-  
+  </div>
+</div>
+
+<script>
+  function normalizeImageUrl(raw) {
+    if (!raw) return raw;
+
+    // If it's a Pinterest pin page (not direct image), warn the user
+    if (raw.includes("pinterest.com/pin/") && !raw.includes("i.pinimg.com")) {
+      alert(
+        "Pinterest pin links cannot be used directly.\n\nRight-click the image, choose 'Copy image address', and paste that URL instead."
+      );
+      return ""; // keep old preview image
+    }
+
+    return raw;
+  }
+
+  function updatePreview() {
+    const title = document.getElementById('title').value || 'Property Title';
+
+    const rawImage = document.getElementById('image').value;
+    const normalized = normalizeImageUrl(rawImage);
+    const image =
+      normalized ||
+      '<%= listing.image && listing.image.url ? listing.image.url : "https://images.unsplash.com/photo-1501785888041-af3ef2552f18" %>';
+
+    const price = document.getElementById('price').value || '<%= listing.price %>';
+    const location = document.getElementById('location').value || '<%= listing.location %>';
+    const country = document.getElementById('country').value || '<%= listing.country %>';
+
+    document.getElementById('previewTitle').textContent = title;
+    document.getElementById('previewImage').src = image;
+    document.getElementById('previewPrice').textContent = `₹${price}/night`;
+    document.getElementById('previewLocation').textContent = `📍 ${location}, ${country}`;
+  }
+
+  // Optional: validate before submit so bad Pinterest URLs are not saved
+  document.querySelector('.edit-form').addEventListener('submit', function (e) {
+    const imgInput = document.getElementById('image');
+    const normalized = normalizeImageUrl(imgInput.value);
+    if (!normalized) {
+      e.preventDefault(); // stop submit if invalid URL
+      return;
+    }
+    imgInput.value = normalized;
+  });
+</script>
+

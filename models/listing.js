@@ -8,13 +8,23 @@ const listingSchema = new Schema({
   },
   description: String,
   image: {
-    filename: String,
-    url: String,
+    filename: {
+      type: String,
+      default: 'listingimage',
+    },
+    url: {
+      type: String,
+      default: 'https://images.unsplash.com/photo-1501785888041-af3ef2552f18',
+      set: (v) =>
+        v === '' || v == null
+          ? 'https://images.unsplash.com/photo-1501785888041-af3ef2552f18'
+          : v,
+    },
   },
   price: Number,
   location: String,
   country: String,
 });
 
-const Listing = mongoose.model("Listing", listingSchema);
+const Listing = mongoose.model('Listing', listingSchema);
 module.exports = Listing;
